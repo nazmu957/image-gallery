@@ -1,31 +1,32 @@
 import { useState } from "react";
 
+
 const ImageGallery = () => {
   const [images, setImages] = useState([
-   " https://i.ibb.co/wJDt5FK/image-1.webp",
-"https://i.ibb.co/9pxvQMm/image-2.webp",
-"https://i.ibb.co/jyjgwJd/image-3.webp",
-"https://i.ibb.co/4Wy00sx/image-4.webp",
-"https://i.ibb.co/2vdMyjj/image-5.webp",
-"https://i.ibb.co/8KKzjB1/image-6.webp",
-"https://i.ibb.co/9HKLsRB/image-7.webp",
-"https://i.ibb.co/YDB7kxr/image-8.webp",
-"https://i.ibb.co/kq1qfr1/image-9.webp",
-"https://i.ibb.co/D1NWWn7/image-10.jpg",
-"https://i.ibb.co/C8fbBwt/image-11.jpg",
+    " https://i.ibb.co/wJDt5FK/image-1.webp",
+    "https://i.ibb.co/9pxvQMm/image-2.webp",
+    "https://i.ibb.co/jyjgwJd/image-3.webp",
+    "https://i.ibb.co/4Wy00sx/image-4.webp",
+    "https://i.ibb.co/2vdMyjj/image-5.webp",
+    "https://i.ibb.co/8KKzjB1/image-6.webp",
+    "https://i.ibb.co/9HKLsRB/image-7.webp",
+    "https://i.ibb.co/YDB7kxr/image-8.webp",
+    "https://i.ibb.co/kq1qfr1/image-9.webp",
+    "https://i.ibb.co/D1NWWn7/image-10.jpg",
+    "https://i.ibb.co/C8fbBwt/image-11.jpg",
+    // ... your image URLs here
   ]);
-
   const [selectedImages, setSelectedImages] = useState([]);
   const [draggedImageIndex, setDraggedImageIndex] = useState(null);
+  const [showCheckbox, setShowCheckbox] = useState(false);
 
   const toggleImageSelection = (index) => {
-    const selectedIndex = selectedImages.indexOf(index);
-    if (selectedIndex === -1) {
-      setSelectedImages([...selectedImages, index]);
+    if (selectedImages.includes(index)) {
+      setSelectedImages(selectedImages.filter((i) => i !== index));
     } else {
-      const updatedSelection = selectedImages.filter((i) => i !== index);
-      setSelectedImages(updatedSelection);
+      setSelectedImages([...selectedImages, index]);
     }
+    setShowCheckbox(true); // Show checkbox when an image is clicked
   };
 
   const handleDeleteSelectedImages = () => {
@@ -34,49 +35,71 @@ const ImageGallery = () => {
     );
     setImages(updatedImages);
     setSelectedImages([]);
+    setShowCheckbox(false); // Hide checkbox after deleting selected images
   };
 
-  const handleDragStart = (e, index) => {
-    e.dataTransfer.setData("index", index);
+  const handleDragStart = (index) => {
     setDraggedImageIndex(index);
   };
 
-  const handleDragOver = (e, index) => {
-    e.preventDefault();
+  const handleDragOver = (index) => {
     if (draggedImageIndex !== index) {
-      const newImages = [...images];
-      const [draggedImage] = newImages.splice(draggedImageIndex, 1);
-      newImages.splice(index, 0, draggedImage);
-      setImages(newImages);
+      const updatedImages = [...images];
+      const [draggedImage] = updatedImages.splice(draggedImageIndex, 1);
+      updatedImages.splice(index, 0, draggedImage);
+      setImages(updatedImages);
       setDraggedImageIndex(index);
     }
   };
 
   return (
-    <div className="lg:p-[10rem] ">
-      <div className="bg-sky-300 lg:pb-[4rem]">
-        <div>
-          <h2 className="text-2xl p-4 font-bold">Gallery</h2>
-          <hr />
+    <div className="lg:p-[10rem]">
+      <div className="bg-slate-200 lg:pb-[4rem]">
+        <div className="flex justify-between  ">
+          <div>
+            <h2 className="text-2xl p-4 font-bold">
+              {selectedImages.length}{" "}
+              {selectedImages.length === 1 ? "Image" : "Images"} Selected
+            </h2>
+          </div>
+          <div className="mr-[58rem]"></div>
+          <div className="">
+            {/* Delete Button */}
+            {selectedImages.length > 0 && (
+              <button
+                className="mt-4  text-red-600 py-2 px-4 rounded"
+                onClick={handleDeleteSelectedImages}
+              >
+                Delete Selected Images
+              </button>
+            )}
+          </div>
+          <hr className="h-[2rem]" />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2  ">
+        <div className="grid grid-cols-1 sm:grid-cols-2">
           {/* Large Image */}
-          <div
-            className={` w-[100%] h-[37rem] cursor-pointer  ${
-              selectedImages.includes(0)
-                ? "border-4 rounded-sm border-blue-500"
-                : ""
-            }`}
-            onClick={() => toggleImageSelection(0)}
-            draggable
-            onDragStart={(e) => handleDragStart(e, 0)}
-            onDragOver={(e) => handleDragOver(e, 0)}
-          >
-            <div className="bg-white rounded-xl  overflow-hidden border-solid border-[.1rem] m-[3rem] border-slate-300 ">
+          <div className={`w-[100%] h-[37rem] cursor-pointer relative`}>
+            <div
+              className={`bg-white rounded-xl overflow-hidden border-solid border-[.1rem] m-[3rem] border-slate-300 ${
+                selectedImages.includes(0) ? "border-4 border-blue-500" : ""
+              }`}
+              onClick={() => toggleImageSelection(0)}
+              draggable
+              onDragStart={() => handleDragStart(0)}
+              onDragOver={() => handleDragOver(0)}
+            >
+              {showCheckbox && (
+                <input
+                  type="checkbox"
+                  className="daysi-checkbox absolute top-2 left-2"
+                  checked={selectedImages.includes(0)}
+                  readOnly
+                />
+              )}
               <img
                 src={images[0]}
                 alt="Large"
-                className="w-[100%] h-[32.5rem]  "
+                className="w-[100%] h-[32.5rem]"
               />
             </div>
           </div>
@@ -86,16 +109,24 @@ const ImageGallery = () => {
             {images.slice(1, 7).map((image, index) => (
               <div
                 key={index}
-                className={`m-5 rounded-xl  overflow-hidden  border-solid border-[.1rem] border-slate-300  cursor-pointer ${
+                className={`m-5 rounded-xl overflow-hidden border-solid border-[.1rem] border-slate-300 cursor-pointer relative ${
                   selectedImages.includes(index + 1)
                     ? "border-4 border-blue-500"
                     : ""
                 }`}
-                draggable
-                onDragStart={(e) => handleDragStart(e, index + 1)}
-                onDragOver={(e) => handleDragOver(e, index + 1)}
                 onClick={() => toggleImageSelection(index + 1)}
+                draggable
+                onDragStart={() => handleDragStart(index + 1)}
+                onDragOver={() => handleDragOver(index + 1)}
               >
+                {showCheckbox && (
+                  <input
+                    type="checkbox"
+                    className="daysi-checkbox absolute top-2 left-2"
+                    checked={selectedImages.includes(index + 1)}
+                    readOnly
+                  />
+                )}
                 <img
                   src={image}
                   alt={`Small ${index}`}
@@ -111,16 +142,24 @@ const ImageGallery = () => {
           {images.slice(7).map((image, index) => (
             <div
               key={index + 7}
-              className={`bg-white rounded-lg overflow-hidden cursor-pointer  border-solid border-[.1rem] border-slate-300 ${
+              className={`bg-white rounded-lg overflow-hidden cursor-pointer border-solid border-[.1rem] border-slate-300 relative ${
                 selectedImages.includes(index + 7)
                   ? "border-4 border-blue-500"
                   : ""
               }`}
-              draggable
-              onDragStart={(e) => handleDragStart(e, index + 7)}
-              onDragOver={(e) => handleDragOver(e, index + 7)}
               onClick={() => toggleImageSelection(index + 7)}
+              draggable
+              onDragStart={() => handleDragStart(index + 7)}
+              onDragOver={() => handleDragOver(index + 7)}
             >
+              {showCheckbox && (
+                <input
+                  type="checkbox"
+                  className="daysi-checkbox absolute top-2 left-2"
+                  checked={selectedImages.includes(index + 7)}
+                  readOnly
+                />
+              )}
               <img
                 src={image}
                 alt={`Small ${index}`}
@@ -129,16 +168,6 @@ const ImageGallery = () => {
             </div>
           ))}
         </div>
-
-        {/* Delete Button */}
-        {selectedImages.length > 0 && (
-          <button
-            className="mt-4 bg-red-500 text-white py-2 px-4 rounded"
-            onClick={handleDeleteSelectedImages}
-          >
-            Delete Selected Images
-          </button>
-        )}
       </div>
     </div>
   );
