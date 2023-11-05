@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 
+import { BsImageAlt } from "react-icons/bs";
+
 const ImageGallery = () => {
   const [images, setImages] = useState([
     " https://i.ibb.co/wJDt5FK/image-1.webp",
@@ -52,6 +54,10 @@ const ImageGallery = () => {
     }
   };
 
+  const handleImageUpload = (event) => {
+    const uploadedImage = URL.createObjectURL(event.target.files[0]);
+    setImages([...images, uploadedImage]);
+  };
   return (
     <div className="lg:p-[10rem]">
       <div className="bg-slate-200 lg:pb-[4rem]">
@@ -167,6 +173,21 @@ const ImageGallery = () => {
               />
             </div>
           ))}
+          <div className="bg-white rounded-lg overflow-hidden border-solid border-[.1rem] border-slate-300 relative p-4 flex flex-col items-center justify-center text-gray-600">
+            <label
+              htmlFor="file-upload"
+              className="daysi-button daysi-button-primary mb-2"
+            >
+              <BsImageAlt className="text-3xl" />
+            </label>
+            <input
+              id="file-upload"
+              type="file"
+              className="hidden"
+              onChange={handleImageUpload}
+            />
+            <p className="text-base">Add Image</p>
+          </div>
         </div>
       </div>
     </div>
