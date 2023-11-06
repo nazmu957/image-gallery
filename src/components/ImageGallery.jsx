@@ -1,10 +1,9 @@
 import { useState } from "react";
-
 import { BsImageAlt } from "react-icons/bs";
 
 const ImageGallery = () => {
   const [images, setImages] = useState([
-    " https://i.ibb.co/wJDt5FK/image-1.webp",
+    "https://i.ibb.co/wJDt5FK/image-1.webp",
     "https://i.ibb.co/9pxvQMm/image-2.webp",
     "https://i.ibb.co/jyjgwJd/image-3.webp",
     "https://i.ibb.co/4Wy00sx/image-4.webp",
@@ -15,7 +14,6 @@ const ImageGallery = () => {
     "https://i.ibb.co/kq1qfr1/image-9.webp",
     "https://i.ibb.co/D1NWWn7/image-10.jpg",
     "https://i.ibb.co/C8fbBwt/image-11.jpg",
-    // ... your image URLs here
   ]);
   const [selectedImages, setSelectedImages] = useState([]);
   const [draggedImageIndex, setDraggedImageIndex] = useState(null);
@@ -27,7 +25,7 @@ const ImageGallery = () => {
     } else {
       setSelectedImages([...selectedImages, index]);
     }
-    setShowCheckbox(true); // Show checkbox when an image is clicked
+    setShowCheckbox(true);
   };
 
   const handleDeleteSelectedImages = () => {
@@ -36,7 +34,7 @@ const ImageGallery = () => {
     );
     setImages(updatedImages);
     setSelectedImages([]);
-    setShowCheckbox(false); // Hide checkbox after deleting selected images
+    setShowCheckbox(false);
   };
 
   const handleDragStart = (index) => {
@@ -59,18 +57,19 @@ const ImageGallery = () => {
   };
 
   const selectedImagesCount = selectedImages.length;
+
   return (
-    <div className="lg:p-[10rem] ">
+    <div className="lg:px-[10rem] ">
       <div className="bg-white rounded-xl lg:pb-[4rem]">
-        <div className="flex justify-between  ">
+        <div className="flex justify-between ">
           <div>
-            <h2 className="text-xl p-4 ml-6 font-bold">
+            <h2 className="text-sm p-4 ml-6 text-primary font-bold">
               {selectedImagesCount > 0 ? (
                 <label className="flex items-center">
                   <input
                     type="checkbox"
                     checked="checked"
-                    className="checkbox checkbox-primary checkbox-xs m-2"
+                    className="checkbox bg-red-300 checkbox-xs m-2"
                   />
                   {`${selectedImagesCount} Images Selected`}
                 </label>
@@ -82,10 +81,9 @@ const ImageGallery = () => {
 
           <div className="mr-[58rem]"></div>
           <div className="">
-            {/* Delete Button */}
             {selectedImages.length > 0 && (
               <button
-                className="mt-4 me-5  text-red-600 py-2 px-4 rounded"
+                className="mt-4 me-5 bg-white text-red-600 py-2 px-4 rounded"
                 onClick={handleDeleteSelectedImages}
               >
                 Delete File
@@ -95,10 +93,11 @@ const ImageGallery = () => {
         </div>
         <hr className="border-2" />
         <div className="grid grid-cols-1 sm:grid-cols-2">
-          {/* Large Image */}
-          <div className={`w-[100%] h-[100%] cursor-pointer p-[2rem]  relative`}>
+          <div
+            className={`w-[100%] h-[100%] cursor-pointer p-[2rem] ms-4 my-1 relative`}
+          >
             <div
-              className={`bg-red-300 rounded-xl overflow-hidden border-solid border-[.1rem]  border-slate-300 ${
+              className={` rounded-xl overflow-hidden border-solid border-[.1rem]  border-slate-300 ${
                 selectedImages.includes(0) ? "border-4 border-blue-500" : ""
               }`}
               onClick={() => toggleImageSelection(0)}
@@ -118,8 +117,7 @@ const ImageGallery = () => {
             </div>
           </div>
 
-          {/* Small Image Cards (right side) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 p-[2rem]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 py-[2rem] pe-[2rem]">
             {images.slice(1, 7).map((image, index) => (
               <div
                 key={index}
@@ -151,8 +149,7 @@ const ImageGallery = () => {
           </div>
         </div>
 
-        {/* Small Image Cards (second row) */}
-        <div className="grid grid-cols-5 gap-4 me-5 mt-5 lg:ms-[3rem]">
+        <div className="grid grid-cols-5 gap-4 me-5 lg:ms-[3rem]">
           {images.slice(7).map((image, index) => (
             <div
               key={index + 7}
