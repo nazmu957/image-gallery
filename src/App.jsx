@@ -5,7 +5,7 @@ import ImageGallery from "./components/ImageGallery";
 function App() {
   return (
     <>
-      <div>
+      <div className="bg-slate-200">
         <ImageGallery />
       </div>
     </>

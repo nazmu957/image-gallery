@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-
 import { BsImageAlt } from "react-icons/bs";
 
 const ImageGallery = () => {
@@ -58,35 +57,48 @@ const ImageGallery = () => {
     const uploadedImage = URL.createObjectURL(event.target.files[0]);
     setImages([...images, uploadedImage]);
   };
+
+  const selectedImagesCount = selectedImages.length;
   return (
-    <div className="lg:p-[10rem]">
-      <div className="bg-slate-200 lg:pb-[4rem]">
+    <div className="lg:p-[10rem] ">
+      <div className="bg-white rounded-xl lg:pb-[4rem]">
         <div className="flex justify-between  ">
           <div>
-            <h2 className="text-2xl p-4 font-bold">
-              {selectedImages.length}{" "}
-              {selectedImages.length === 1 ? "Image" : "Images"} Selected
+            <h2 className="text-xl p-4 ml-6 font-bold">
+              {selectedImagesCount > 0 ? (
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked="checked"
+                    className="checkbox checkbox-primary checkbox-xs m-2"
+                  />
+                  {`${selectedImagesCount} Images Selected`}
+                </label>
+              ) : (
+                "Gallery"
+              )}
             </h2>
           </div>
+
           <div className="mr-[58rem]"></div>
           <div className="">
             {/* Delete Button */}
             {selectedImages.length > 0 && (
               <button
-                className="mt-4  text-red-600 py-2 px-4 rounded"
+                className="mt-4 me-5  text-red-600 py-2 px-4 rounded"
                 onClick={handleDeleteSelectedImages}
               >
-                Delete Selected Images
+                Delete File
               </button>
             )}
           </div>
-          <hr className="h-[2rem]" />
         </div>
+        <hr className="border-2" />
         <div className="grid grid-cols-1 sm:grid-cols-2">
           {/* Large Image */}
-          <div className={`w-[100%] h-[37rem] cursor-pointer relative`}>
+          <div className={`w-[100%] h-[100%] cursor-pointer p-[2rem]  relative`}>
             <div
-              className={`bg-white rounded-xl overflow-hidden border-solid border-[.1rem] m-[3rem] border-slate-300 ${
+              className={`bg-red-300 rounded-xl overflow-hidden border-solid border-[.1rem]  border-slate-300 ${
                 selectedImages.includes(0) ? "border-4 border-blue-500" : ""
               }`}
               onClick={() => toggleImageSelection(0)}
@@ -102,20 +114,16 @@ const ImageGallery = () => {
                   readOnly
                 />
               )}
-              <img
-                src={images[0]}
-                alt="Large"
-                className="w-[100%] h-[32.5rem]"
-              />
+              <img src={images[0]} alt="Large" className="w-[100%] h-[100%]" />
             </div>
           </div>
 
           {/* Small Image Cards (right side) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 p-[2rem]">
             {images.slice(1, 7).map((image, index) => (
               <div
                 key={index}
-                className={`m-5 rounded-xl overflow-hidden border-solid border-[.1rem] border-slate-300 cursor-pointer relative ${
+                className={`m-1  rounded-xl overflow-hidden border-solid border-[.1rem] border-slate-300 cursor-pointer relative ${
                   selectedImages.includes(index + 1)
                     ? "border-4 border-blue-500"
                     : ""
@@ -144,11 +152,11 @@ const ImageGallery = () => {
         </div>
 
         {/* Small Image Cards (second row) */}
-        <div className="grid grid-cols-5 gap-4 lg:ms-[3rem]">
+        <div className="grid grid-cols-5 gap-4 me-5 mt-5 lg:ms-[3rem]">
           {images.slice(7).map((image, index) => (
             <div
               key={index + 7}
-              className={`bg-white rounded-lg overflow-hidden cursor-pointer border-solid border-[.1rem] border-slate-300 relative ${
+              className={`bg-white m-2 rounded-lg overflow-hidden cursor-pointer border-solid border-[.1rem] border-slate-300 relative ${
                 selectedImages.includes(index + 7)
                   ? "border-4 border-blue-500"
                   : ""
@@ -173,7 +181,7 @@ const ImageGallery = () => {
               />
             </div>
           ))}
-          <div className="bg-white rounded-lg overflow-hidden border-solid border-[.1rem] border-slate-300 relative p-4 flex flex-col items-center justify-center text-gray-600">
+          <div className="bg-white m-2 rounded-lg overflow-hidden border-dashed border-[.2rem] border-slate-300 relative p-4 flex flex-col items-center justify-center text-gray-600">
             <label
               htmlFor="file-upload"
               className="daysi-button daysi-button-primary mb-2"
